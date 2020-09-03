@@ -1,6 +1,7 @@
 package com.example.javaSpringBoot_JDK11.dao;
 
 import com.example.javaSpringBoot_JDK11.model.Person;
+import org.springframework.asm.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,8 +21,10 @@ public class PersonDataAccessService implements PersonDao{
     }
 
     @Override
-    public int insertPerson(UUID id, Person person) {
-        return 0;
+    public int insertPerson(Person person) {
+        final String sql = "INSERT INTO person (id ,name) VALUES (?,?)";
+        int row = jdbcTemplate.update(sql,UUID.randomUUID(),person.getName());
+        return row;
     }
 
     @Override
@@ -50,11 +53,15 @@ public class PersonDataAccessService implements PersonDao{
 
     @Override
     public int deletePersonById(UUID id) {
-        return 0;
+        final String sql = "Delete FROM person WHERE id = ?";
+         int row = jdbcTemplate.update(sql,id);
+        return row;
     }
 
     @Override
     public int updatePersonById(UUID id, Person person) {
-        return 0;
+        final String sql = "UPDATE person SET name = ? WHERE id = ?";
+        int row = jdbcTemplate.update(sql,person.getName(),id);
+        return row;
     }
 }
